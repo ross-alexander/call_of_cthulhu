@@ -1,0 +1,228 @@
+% ----------------------------------------------------------------------
+%
+% 2025-12-11: Jinja template for CoC 7th Edition Character Sheet
+%
+% ----------------------------------------------------------------------
+
+\documentclass{article}
+
+\RequirePackage{geometry}
+\RequirePackage{libertine}
+\RequirePackage{tabularray}
+\RequirePackage[dvipsnames,svgnames]{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage[skip=4pt plus 4pt minus 2pt, indent=0mm]{parskip}
+\RequirePackage[most]{tcolorbox}
+
+\geometry{paper=a4paper,margin=15mm}
+
+% --------------------
+% Use tcolorbox for backgrounds
+% --------------------
+
+\tcbset{
+  bgtable/.style={
+    enhanced,
+    frame engine=empty,
+    before=0mm,
+    left=0mm,
+    right=0mm,
+    after=0mm,
+    notitle,
+    watermark graphics=#1,
+    watermark opacity=1.0,
+    watermark overzoom=1.0,
+    nobeforeafter
+  },
+  skilltable/.style={
+    enhanced,
+    frame engine=empty,
+    before=0mm,
+    left=0mm,
+    right=0mm,
+    after=0mm,
+    notitle,
+    colback=black,
+    nobeforeafter
+  }
+}
+
+% --------------------
+% tables via tabularray
+% --------------------
+
+\NewTblrEnviron{stattblr}
+\SetTblrInner[stattblr]{
+      rowsep=0mm,
+      colspec={cr},
+      hline{1,4}={0.1mm,yellow9},
+      vline{1,3}={0.1mm,yellow9},
+      cell{1}{1}={c=2,r=1}{c,fg=yellow9,font=\scshape,wd=27mm},
+      cell{2}{1}={c=1,r=2}{r,wd=20mm,fg=white,font=\Large},
+      cell{2-3}{2}={r,fg=white,font=\small},
+}
+
+\NewTblrEnviron{basetblr}
+\SetTblrInner[basetblr]{
+    width=\linewidth,
+    colspec={llllll},
+    rowsep=0mm,
+    cell{1}{1}={r=4,c=1}{c},
+    cell{1}{2,4}={c=2}{l,fg=yellow9},
+    cell{2}{2,4}={c=2}{l,fg=white},
+    cell{1-2}{4}={c=2}{l},
+    cell{3}{2-5}={wd=25mm,fg=yellow9},
+    cell{4}{2-5}={wd=25mm,fg=white},
+}
+
+\setmainfont[Scale=0.8]{Linux Libertine O}
+
+% ----------------------------------------------------------------------
+
+\begin{document}
+
+\BLOCK{if character.base}
+%%set base=character.base
+\begin{tcolorbox}[bgtable=bg.png,width=\linewidth]
+\begin{basetblr}{}
+\includegraphics[width=40mm]{logo.pdf} & \textsc{character name} & & \textsc{occupation} \\
+  & \VAR{base.name} & & \VAR{base.occupation} \\
+  & \textsc{age} & \textsc{gender} & \textsc{residence} & \textsc{birthplace} \\
+  & \VAR{base.age} & \VAR{base.gender} & \VAR{base.residence} & \VAR{base.birthplace} \\
+\end{basetblr}
+
+%% set stats=character.stats
+
+\begin{tblr}{
+      colspec={ccccc},
+      cell{1}{5}={c=1,r=3}{}
+    }
+\begin{stattblr}{}
+strength & \\
+\VAR{stats.STR.value} & \VAR{stats.STR.value_50} \\
+& \VAR{stats.STR.value_20} \\
+\end{stattblr}
+&
+\begin{stattblr}{}
+constitution & \\
+\VAR{stats.CON.value} & \VAR{stats.CON.value_50} \\
+& \VAR{stats.CON.value_20} \\
+\end{stattblr}
+&
+\begin{stattblr}{}
+size & \\
+\VAR{stats.SIZ.value} & \VAR{stats.SIZ.value_50} \\
+& \VAR{stats.SIZ.value_20} \\
+\end{stattblr}
+&
+\begin{stattblr}{}
+hit points & \\
+\VAR{stats.HP.CUR} / \VAR{stats.HP.MAX} & \\
+&  \\
+\end{stattblr}
+&
+\begin{tblr}{colspec={c},
+      columns={wd=27mm},
+      rows={font=\scshape,fg=yellow9},
+      row{2-4,6-7}={fg=white},
+      hline{2,3,4,5,6,7,8}={0.1mm,yellow9},
+      vline{1-2}={2-4,6-8}{0.1mm,yellow9},
+    }
+  conditions \\
+  major wound \\
+  unconscious \\
+  dying \\
+  insanities \\
+  temp. insane \\
+  indef. insane \\
+\end{tblr}
+\\
+\begin{stattblr}{}
+dexturity & \\
+\VAR{stats.DEX.value} & \VAR{stats.DEX.value_50} \\
+& \VAR{stats.DEX.value_20} \\
+      dexterity & \\
+\end{stattblr}
+&
+\begin{stattblr}{}
+appearance & \\
+\VAR{stats.APP.value} & \VAR{stats.APP.value_50} \\
+& \VAR{stats.APP.value_20} \\
+\end{stattblr}
+&
+\begin{stattblr}{}
+education & \\
+\VAR{stats.EDU.value} & \VAR{stats.EDU.value_50} \\
+& \VAR{stats.EDU.value_20} \\
+\end{stattblr}
+  &
+  \begin{stattblr}{}
+      magic points & \\
+      - / 76 &  \\
+         &  \\
+\end{stattblr}
+&
+\\
+\begin{stattblr}{}
+intelligence & \\
+\VAR{stats.INT.value} & \VAR{stats.INT.value_50} \\
+& \VAR{stats.INT.value_20} \\
+\end{stattblr}
+&
+\begin{stattblr}{}
+power & \\
+\VAR{stats.POW.value} & \VAR{stats.POW.value_50} \\
+& \VAR{stats.POW.value_20} \\
+\end{stattblr}
+&
+\begin{stattblr}{}
+luck & \\
+\VAR{stats.LUCK} & \\
+& \\
+\end{stattblr}
+&
+\begin{stattblr}{}
+sanity & \\
+\VAR{stats.SAN.CUR} / \VAR{stats.SAN.MAX} & \\
+&  \\
+\end{stattblr}
+&
+\\
+\end{tblr}
+\end{tcolorbox}
+\BLOCK{endif}
+
+\BLOCK{if character.skills}
+
+\begin{tcolorbox}[skilltable,width=\linewidth]
+
+\begin{tblr}{
+    width=\linewidth,
+    colspec={XXX},
+    colsep=2mm,
+    column{1}={leftsep=0mm,rightsep=2mm},
+    column{2}={leftsep=2mm,rightsep=2mm},
+    column{3}={leftsep=2mm,rightsep=0mm},
+  }
+\BLOCK{for i in range(0,3)}
+%% set indexlist=character.skills[i]|selectattr('index')|map(attribute='index')|join(',')
+\begin{tblr}{
+    columns={fg=white},
+    hlines={0.1mm,yellow9},
+    baseline={T},
+    colspec={Xr},
+    \BLOCK{if indexlist}cell{\VAR{indexlist}}{1}={r=1,c=2}{c,fg=yellow9}\BLOCK{endif}
+  }
+\BLOCK{for skill in character.skills[i]}
+\VAR{skill.skill} & \VAR{skill.value} \\
+\BLOCK{endfor}
+\end{tblr}
+\BLOCK{if i<2} & \BLOCK{endif}
+\BLOCK{if i==2} \\ \BLOCK{endif}
+
+\BLOCK{endfor}
+\end{tblr}
+\end{tcolorbox}
+\BLOCK{endif}
+
+\end{document}
