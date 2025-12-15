@@ -59,51 +59,13 @@ def format_base(character, template_tbl):
         template_tbl['base'][base] = character[base]
         print("%s: %s" % (base, template_tbl['base'][base]))
 
-
-    
 # ----------------------------------------------------------------------
 #
-# format_character
+# format_stats
 #
 # ----------------------------------------------------------------------
 
-def format_character(opts):
-    yaml = yaml_file_read(opts['inpath'])
-
-    if not 'game' in yaml:
-        print("Missing 'game' key from YAML file", file=sys.stderr)
-        exit(1)
-
-    if not 'name' in yaml['game']:
-        print("Missing 'name' key from 'game'", file=sys.stderr)
-        exit(1)
-
-    if not (yaml['game']['name'] == 'Call of Cthulhu 7th Ed'):
-        print("Game name must be 'Call of Cthulhu 7th Ed'", file=sys.stdrr)
-        exit(1)
-
-    if not 'character' in yaml['game']:
-        print("'character' key missing from 'game'", file=sys.stderr)
-        exit(1)
-
-    character = yaml['game']['character']
-
-    template_tbl = {
-        'base': {}
-    }
-
-    # --------------------
-    # base
-    # --------------------
-
-    format_base(character, template_tbl)
-    
-    # --------------------
-    #
-    # stats
-    #
-    # --------------------
-
+def format_stats(character, template_tbl):
     if not 'stats' in character:
         print("Key 'stats' missing from 'character'", file=sys.stderr)
         exit(1)
@@ -235,10 +197,13 @@ def format_character(opts):
     }
     print("MP: %s/%s" % (mp['CUR'],mp['MAX']))
 
-    # --------------------
-    # Skills
-    # --------------------
+# ----------------------------------------------------------------------
+#
+# format_skills
+#
+# ----------------------------------------------------------------------
 
+def format_skills(character, template_tbl):
     skill_table = {
         'Accounting': { 'base': 5},
         'Anthropology': { 'base': 1},
@@ -400,6 +365,7 @@ def format_character(opts):
     # Evaluate all skills
     # --------------------
 
+    stats = character['stats']
     for name,value in skills_char.items():
         if not 'cur' in value:
             if 'base' in value:
@@ -448,6 +414,55 @@ def format_character(opts):
             index += 1
 
     template_tbl['skills'] = skills
+
+# ----------------------------------------------------------------------
+#
+# format_character
+#
+# ----------------------------------------------------------------------
+
+def format_character(opts):
+    yaml = yaml_file_read(opts['inpath'])
+
+    if not 'game' in yaml:
+        print("Missing 'game' key from YAML file", file=sys.stderr)
+        exit(1)
+
+    if not 'name' in yaml['game']:
+        print("Missing 'name' key from 'game'", file=sys.stderr)
+        exit(1)
+
+    if not (yaml['game']['name'] == 'Call of Cthulhu 7th Ed'):
+        print("Game name must be 'Call of Cthulhu 7th Ed'", file=sys.stdrr)
+        exit(1)
+
+    if not 'character' in yaml['game']:
+        print("'character' key missing from 'game'", file=sys.stderr)
+        exit(1)
+
+    character = yaml['game']['character']
+
+    template_tbl = {
+        'base': {}
+    }
+
+    # --------------------
+    # base
+    # --------------------
+
+    format_base(character, template_tbl)
+    
+    # --------------------
+    # stats
+    # --------------------
+
+    format_stats(character, template_tbl)
+    
+    # --------------------
+    # Skills
+    # --------------------
+
+    format_skills(character, template_tbl)
 
     # --------------------
     # Jinja
